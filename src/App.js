@@ -20,12 +20,20 @@ function App() {
   
     const encodedUrl = encodeURIComponent(inputUrl);
   
-    fetch(`http://localhost:8000/cars_plot/get_data/?url=${encodedUrl}`)
+  fetch(`http://localhost:8000/cars_plot/get_data/?url=${encodedUrl}`)
     .then(response => response.json())
     .then(({ plot, cars }) => {
       // Log the data for debugging
-      console.log(plot); 
-      console.log(cars); 
+      console.log('Plot:', plot); 
+      console.log('Cars:', cars); 
+
+      // Check if cars or plot is an object with code and name
+      if (typeof cars === 'object' && cars !== null) {
+        console.log('Cars keys:', Object.keys(cars));
+      }
+      if (typeof plot === 'object' && plot !== null) {
+          console.log('Plot keys:', Object.keys(plot));
+      }
       
       // Set the car data
       setCarData(cars);
@@ -38,7 +46,7 @@ function App() {
       setCarData([]);
       setPlotData(null);
     });
-  };
+  }
 
   return (
     <div className="App">
@@ -76,17 +84,18 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {carData.map((car, index) => (
-              <tr key={index}>
-                <td>{car.make}</td>
-                <td>{car.model}</td>
-                <td>{car.type}</td>
-                <td>{car.year}</td>
-                <td>{car.mileage}</td>
-                <td>{car.dealer}</td>
-                <td>{car.price}</td>
-              </tr>
-            ))}
+          {carData.map((car, index) => (
+            <tr key={index}>
+              <td>{typeof car.make === 'object' ? JSON.stringify(car.make) : car.make}</td>
+              <td>{typeof car.model === 'object' ? JSON.stringify(car.model) : car.model}</td>
+              <td>{typeof car.type === 'object' ? JSON.stringify(car.type) : car.type}</td>
+              <td>{typeof car.year === 'object' ? JSON.stringify(car.year) : car.year}</td>
+              <td>{typeof car.mileage === 'object' ? JSON.stringify(car.mileage) : car.mileage}</td>
+              <td>{typeof car.dealer === 'object' ? JSON.stringify(car.dealer) : car.dealer}</td>
+              <td>{typeof car.price === 'object' ? JSON.stringify(car.price) : car.price}</td>
+            </tr>
+          ))}
+
           </tbody>
         </table>
       ) : (
